@@ -1,9 +1,13 @@
 import json
 import sys
+import os
 
 
 def load_data(filepath):
-    return json.load(open(filepath, 'r'))
+    if not os.path.exists(filepath):
+        return None
+    with open(filepath, 'r') as file_handler:
+        return json.load(file_handler)
 
 
 def pretty_print_json(data):
@@ -15,6 +19,10 @@ if __name__ == '__main__':
             print("Скрипт выводит содержимое JSON-файла в удобном ввиде.")
             print("Введите в терминале: python3.5 pprint_json.py youfile.json")
         else:
-            print(pretty_print_json(load_data(sys.argv[1])))
+            json_file = load_data(sys.argv[1])
+            if json_file is None:
+                print("JSON-файл не обнаружен!")
+            else:
+                print(pretty_print_json(json_file))
     else:
         print("Не задан файл для вывода!")
